@@ -3,10 +3,9 @@ from json import dumps
 from dictionary import *
 
 
-async def mezgebe_kalat(update,context):
-    user = update.effective_user
-    word = update.message.text
-    response = await fetch(word)
+async def mezgebe_kalat(text,chat_id,API_URL,BOT_TOKEN):
+
+    response = await fetch(text)
     def construct_msg(res: list):
         msg = ""
         for r in res:
@@ -27,6 +26,7 @@ async def mezgebe_kalat(update,context):
                                    text=msg,
                                    parse_mode="HTML",
                                    disable_web_page_preview=True)
+    api_endpoint = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
     async with aiohttp.ClientSession() as session:
       async with session.post(api_endpoint,data=dumps(data),headers=headers) as response:
         return await parse_json(response.json())
